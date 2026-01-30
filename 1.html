@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EnglishMastery - Supermarket Lesson</title>
+<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png" type="image/png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        teal: { 50: "#f0fdfa", 100: "#ccfbf1", 500: "#14b8a6", 600: "#0d9488", 700: "#0f766e", 800: "#115e59", 900: "#134e4a" },
+        indigo: { 50: "#eef2ff", 100: "#e0e7ff", 500: "#6366f1", 600: "#4f46e5", 800: "#3730a3", 900: "#312e81" },
+      },
+      animation: { pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" },
+    },
+  },
+};
+</script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Amiri:wght@400;700&display=swap");
+body { font-family: "Noto Sans", sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+.serif-text { font-family: "Noto Serif", serif; }
+.arabic-text { font-family: "Amiri", serif; direction: rtl; line-height: 1.8; }
+.chapter-transition { transition: opacity 0.4s ease-in-out; }
+.vocab-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.vocab-card:hover { transform: translateY(-2px); }
+.category-pill.active { background-color: #0d9488; color: white; border-color: #0d9488; }
+html.dark .category-pill.active { background-color: #14b8a6; color: black; border-color: #14b8a6; }
+.quiz-option { transition: all 0.2s ease; }
+#mobile-menu { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+#mobile-menu.open { max-height: 400px; opacity: 1; }
+#brand-name { cursor: pointer; user-select: none; }
+.allow-select { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
+.speaking { color: #0d9488 !important; animation: pulse 1s infinite; }
+.dark .speaking { color: #14b8a6 !important; }
+.word-highlight { background-color: #fef08a; color: #000; border-radius: 4px; padding: 0 2px; transition: background-color 0.1s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.dark .word-highlight { background-color: #ca8a04; color: #fff; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#FDFCF0] text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+
+<!-- Header -->
+<header class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-300">
+<div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center relative">
+<h1 id="brand-name" class="text-lg md:text-xl font-bold tracking-tight z-20">English<span class="text-teal-600 dark:text-teal-400">Mastery</span></h1>
+<nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600 dark:text-gray-300">
+<button onclick="scrollToSection('story')" class="hover:text-teal-600 dark:hover:text-teal-400 transition">Story</button>
+<button onclick="scrollToSection('vocabulary')" class="hover:text-teal-600 dark:hover:text-teal-400 transition">Vocabulary</button>
+<button onclick="scrollToSection('indepth')" class="hover:text-teal-600 dark:hover:text-teal-400 transition">In-Depth</button>
+<button onclick="scrollToSection('differences')" class="hover:text-teal-600 dark:hover:text-teal-400 transition">Differences</button>
+<button onclick="scrollToSection('assessment')" class="hover:text-teal-600 dark:hover:text-teal-400 transition">Quiz</button>
+<button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="Toggle Dark Mode">
+<svg id="sun-icon" class="w-5 h-5 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+<svg id="moon-icon" class="w-5 h-5 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+</button>
+</nav>
+<div class="flex items-center gap-2 md:hidden z-20">
+<button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+<svg class="w-5 h-5 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+<svg class="w-5 h-5 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+</button>
+<button id="mobile-menu-btn" class="p-2 text-gray-600 dark:text-gray-300 focus:outline-none">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+</button>
+</div>
+</div>
+<div id="mobile-menu" class="absolute top-full left-0 w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-lg md:hidden z-10">
+<div class="flex flex-col p-4 space-y-3">
+<button onclick="scrollToSection('story'); toggleMobileMenu();" class="text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-gray-700 dark:text-gray-200">The Story</button>
+<button onclick="scrollToSection('vocabulary'); toggleMobileMenu();" class="text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-gray-700 dark:text-gray-200">Vocabulary</button>
+<button onclick="scrollToSection('indepth'); toggleMobileMenu();" class="text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-gray-700 dark:text-gray-200">In-Depth</button>
+<button onclick="scrollToSection('differences'); toggleMobileMenu();" class="text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-gray-700 dark:text-gray-200">Differences</button>
+<button onclick="scrollToSection('assessment'); toggleMobileMenu();" class="text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-gray-700 dark:text-gray-200">Quiz</button>
+</div>
+</div>
+</header>
+
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="py-12 md:py-24 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
+<div class="container mx-auto px-4 text-center max-w-4xl">
+<h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 serif-text leading-tight text-gray-900 dark:text-white">Supermarket & Food</h2>
+<p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8 md:mb-10">
+    Lesson 1: Learn shopping vocabulary, understand the "In-Depth" grammar rules, and master the "Differences" between confusing words.
+</p>
+<div class="w-full max-w-3xl mx-auto">
+<div class="rounded-2xl overflow-hidden shadow-lg border border-teal-100 dark:border-teal-800 bg-black aspect-video relative group">
+<div id="video-placeholder" class="absolute inset-0 bg-teal-50 dark:bg-teal-900/30 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-900/50" onclick="playEmbeddedVideo()">
+<button class="text-white bg-teal-600 hover:bg-teal-700 font-bold text-lg flex items-center gap-3 px-8 py-4 rounded-full shadow-lg transition transform group-hover:scale-105">
+<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>Start Lesson
+</button>
+</div>
+<div id="video-embed-container" class="w-full h-full hidden"></div>
+</div>
+<div id="video-controls" class="hidden mt-4 text-center">
+<button onclick="closeEmbeddedVideo()" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-bold text-sm flex items-center justify-center gap-2 mx-auto bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-full transition">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>Close Video
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 1: THE STORY -->
+<section id="story" class="py-12 md:py-20 bg-[#FDFCF0] dark:bg-gray-900 transition-colors duration-300">
+<div class="container mx-auto px-4 max-w-3xl">
+<div class="text-center mb-8 md:mb-12">
+<span class="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-widest text-sm">Segment 1</span>
+<h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-2">The Story: Ali's Trip</h3>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+<div class="h-1 w-full bg-gray-100 dark:bg-gray-700"><div id="story-progress" class="h-full bg-teal-600 dark:bg-teal-500 transition-all duration-500" style="width: 20%"></div></div>
+<div class="p-6 md:p-12 min-h-[400px] md:min-h-[500px] flex flex-col justify-between">
+<div id="chapter-container" class="chapter-transition">
+<div class="flex justify-between items-start mb-4 md:mb-6">
+<h4 id="chapter-title" class="text-xl md:text-2xl font-bold text-teal-800 dark:text-teal-300 serif-text">Chapter 1</h4>
+<div class="flex gap-2">
+<button onclick="toggleChapterAudio()" id="chapter-audio-btn" class="p-2 rounded-full bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition group" title="Play/Pause Chapter">
+<svg id="icon-play" class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+<svg id="icon-pause" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</button>
+<button onclick="toggleChapterTranslation()" class="p-2 rounded-full bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition" title="Translate Chapter">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+</button>
+</div>
+</div>
+<div id="chapter-body" class="serif-text text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 md:space-y-6"></div>
+</div>
+<div class="mt-8 md:mt-12 flex flex-col md:flex-row justify-between items-center border-t border-gray-100 dark:border-gray-700 pt-6 md:pt-8 gap-4">
+<button id="prev-btn" onclick="prevChapter()" class="w-full md:w-auto flex-1 md:flex-none border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 px-4 py-3 md:py-2 rounded-lg text-gray-400 dark:text-gray-500 font-bold hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-30 disabled:hover:border-transparent transition text-sm md:text-base">&larr; Previous</button>
+<span id="chapter-counter" class="text-sm font-bold text-gray-400 dark:text-gray-500 order-first md:order-none">1 / 5</span>
+<button id="next-btn" onclick="nextChapter()" class="w-full md:w-auto flex-1 md:flex-none border-2 border-transparent hover:border-teal-600 px-4 py-3 md:py-2 rounded-lg text-teal-600 dark:text-teal-400 font-bold hover:text-teal-800 dark:hover:text-teal-300 transition text-sm md:text-base">Next &rarr;</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 2: VOCABULARY -->
+<section id="vocabulary" class="py-12 md:py-20 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+<div class="container mx-auto px-4 max-w-6xl">
+<div class="text-center mb-8 md:mb-10">
+<span class="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-widest text-sm">Segment 2</span>
+<h3 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 serif-text">Detailed Vocabulary</h3>
+<p class="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Master the key words from the story. Use the tabs to filter by category.</p>
+</div>
+<div class="max-w-4xl mx-auto mb-8 md:mb-12 space-y-6">
+<div class="relative max-w-md mx-auto">
+<input type="text" id="search-input" placeholder="Search words..." class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-teal-500 outline-none transition-all shadow-sm" oninput="handleSearch(this.value)" />
+<svg class="w-5 h-5 text-gray-400 absolute left-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+</div>
+<div class="flex flex-wrap justify-center gap-2" id="filters">
+<button onclick="filterVocab('all')" class="category-pill active px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-xs md:text-sm font-bold bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">All</button>
+<button onclick="filterVocab('Shop')" class="category-pill px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-xs md:text-sm font-bold bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">Shop</button>
+<button onclick="filterVocab('Food')" class="category-pill px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-xs md:text-sm font-bold bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">Food</button>
+<button onclick="filterVocab('Payment')" class="category-pill px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-xs md:text-sm font-bold bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">Payment</button>
+<button onclick="filterVocab('Action')" class="category-pill px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-xs md:text-sm font-bold bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">Action</button>
+</div>
+</div>
+<div id="vocab-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+</div>
+</section>
+
+<!-- SECTION 3: IN-DEPTH (Fi Al-Omq) -->
+<section id="indepth" class="py-12 md:py-20 bg-indigo-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+<div class="container mx-auto px-4 max-w-5xl">
+<div class="text-center mb-8 md:mb-12">
+<span class="text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest text-sm">Segment 3</span>
+<h3 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 serif-text">In-Depth: Language Rules</h3>
+<p class="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Understanding the "Why" behind the words. (في العمق)</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Card 1: Past Participle -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border-l-4 border-indigo-500">
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 p-2 rounded-lg">1</span>
+            Adjectives from Verbs
+        </h4>
+        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+            <p>In English, we often use the <strong>Past Participle (V3)</strong> as an adjective to describe nouns (similar to 'اسم المفعول' in Arabic).</p>
+            <ul class="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl text-sm">
+                <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Frozen</strong> Food (from Freeze)</li>
+                <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Broken</strong> Window (from Break)</li>
+                <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Painted</strong> Wall (from Paint)</li>
+            </ul>
+            <p class="text-sm italic arabic-text text-gray-500 dark:text-gray-400 mt-2">
+                "لا يوجد وزن 'مفعول' في الإنجليزية، نستخدم التصريف الثالث للفعل ليدل على الصفة."
+            </p>
+        </div>
+    </div>
+
+    <!-- Card 2: Phrasal Verbs -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border-l-4 border-teal-500">
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <span class="bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-300 p-2 rounded-lg">2</span>
+            One Word vs Two Words
+        </h4>
+        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+            <p>Some words change from a <strong>Noun</strong> to a <strong>Verb</strong> simply by adding a space.</p>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div class="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg">
+                    <strong class="block text-indigo-600 mb-1">Noun (One Word)</strong>
+                    <p>Checkout (Place)</p>
+                    <p>Workout (Exercise)</p>
+                    <p>Backup (Copy)</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg">
+                    <strong class="block text-teal-600 mb-1">Verb (Two Words)</strong>
+                    <p>Check out (Action)</p>
+                    <p>Work out (Action)</p>
+                    <p>Back up (Action)</p>
+                </div>
+            </div>
+             <p class="text-sm italic arabic-text text-gray-500 dark:text-gray-400 mt-2">
+                "الاسم كلمة واحدة (Checkout)، الفعل كلمتين (Check out)."
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 4: DIFFERENCES (Al-Furuqat) -->
+<section id="differences" class="py-12 md:py-20 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+<div class="container mx-auto px-4 max-w-5xl">
+<div class="text-center mb-8 md:mb-12">
+<span class="text-red-500 dark:text-red-400 font-bold uppercase tracking-widest text-sm">Segment 4</span>
+<h3 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 serif-text">The Differences</h3>
+<p class="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Mastering the nuances between similar words. (الفروقات)</p>
+</div>
+
+<div class="space-y-8">
+    <!-- Diff 1: Lane vs Aisle -->
+    <div class="flex flex-col md:flex-row gap-6 items-center bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 md:p-8">
+        <div class="flex-1 space-y-4">
+            <h4 class="text-2xl font-bold text-gray-800 dark:text-white">Lane <span class="text-gray-400 mx-2">vs</span> Aisle</h4>
+            <p class="text-gray-600 dark:text-gray-300">Both mean "Path" or "Corridor", but the usage depends on the markings.</p>
+            <div class="flex flex-col gap-3">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">L</div>
+                    <div>
+                        <strong class="block text-gray-900 dark:text-white">Lane (Horizontal Markings)</strong>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Used for traffic, swimming pools, or abstract paths marked by lines on the ground.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                     <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold shrink-0">A</div>
+                    <div>
+                        <strong class="block text-gray-900 dark:text-white">Aisle (Vertical Separators)</strong>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Used when there are physical vertical barriers like shelves (supermarket) or seats (airplane, cinema).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full md:w-1/3 bg-white dark:bg-gray-700 rounded-xl p-6 text-center shadow-inner">
+            <p class="arabic-text text-lg text-gray-700 dark:text-gray-200">
+                "نستخدم <strong>Lane</strong> للطرق والمسارات المرسومة على الأرض.<br>
+                نستخدم <strong>Aisle</strong> للممرات بين الرفوف أو المقاعد."
+            </p>
+        </div>
+    </div>
+
+    <!-- Diff 2: Receipt Family -->
+    <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 md:p-8 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <h4 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">The "Receipt" Family</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl text-center">
+                <span class="block text-xs font-bold uppercase text-teal-600 mb-2">Noun</span>
+                <strong class="block text-lg mb-1">Receipt</strong>
+                <p class="text-sm text-gray-500">Proof of purchase (P is silent).</p>
+                <p class="text-xs arabic-text text-teal-700 mt-1">إيصال</p>
+            </div>
+             <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl text-center">
+                <span class="block text-xs font-bold uppercase text-teal-600 mb-2">Verb</span>
+                <strong class="block text-lg mb-1">Receive</strong>
+                <p class="text-sm text-gray-500">To get something.</p>
+                <p class="text-xs arabic-text text-teal-700 mt-1">يستلم</p>
+            </div>
+             <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl text-center">
+                <span class="block text-xs font-bold uppercase text-teal-600 mb-2">Noun</span>
+                <strong class="block text-lg mb-1">Reception</strong>
+                <p class="text-sm text-gray-500">Place of receiving.</p>
+                <p class="text-xs arabic-text text-teal-700 mt-1">استقبال</p>
+            </div>
+             <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl text-center">
+                <span class="block text-xs font-bold uppercase text-teal-600 mb-2">Noun</span>
+                <strong class="block text-lg mb-1">Recipe</strong>
+                <p class="text-sm text-gray-500">Cooking instructions.</p>
+                <p class="text-xs arabic-text text-teal-700 mt-1">وصفة</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 5: QUIZ -->
+<section id="assessment" class="py-12 md:py-20 bg-[#FDFCF0] dark:bg-gray-800/50 transition-colors duration-300">
+<div class="container mx-auto px-4 max-w-6xl">
+<div class="text-center mb-8 md:mb-12">
+<span class="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-widest text-sm">Assessment Hub</span>
+<h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-2">Practice & Evaluate</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-start">
+<div class="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col h-full min-h-[400px] md:min-h-[500px]">
+<div class="mb-4 md:mb-6">
+<h4 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>Word Recall
+</h4>
+<p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-2">Can you remember the word for this definition?</p>
+</div>
+<div class="bg-teal-50 dark:bg-teal-900/20 p-4 md:p-6 rounded-xl mb-4 md:mb-6 flex-grow">
+<span class="text-xs uppercase font-bold text-teal-600 dark:text-teal-400">Definition:</span>
+<p id="review-definition" class="text-base md:text-lg font-medium text-gray-800 dark:text-gray-200 mt-2 italic">Loading...</p>
+</div>
+<div class="space-y-4">
+<input type="text" id="review-input" placeholder="Type the word here..." class="w-full p-3 md:p-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none transition" onkeydown="if (event.key === 'Enter') checkReviewWord();" />
+<div id="review-feedback" class="h-6 text-sm font-bold text-center"></div>
+<div class="flex gap-3">
+<button onclick="checkReviewWord()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-xl font-bold transition shadow-md text-sm md:text-base">Check Answer</button>
+<button onclick="loadReviewWord()" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm md:text-base" title="Skip / Next">Next</button>
+</div>
+</div>
+</div>
+<div id="mcq-container" class="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-700 h-full flex flex-col min-h-[400px] md:min-h-[500px]">
+<div id="mcq-start" class="flex flex-col items-center justify-center h-full text-center py-6 md:py-10">
+<div class="w-12 h-12 md:w-16 md:h-16 bg-teal-100 dark:bg-teal-900/40 rounded-full flex items-center justify-center text-teal-600 dark:text-teal-400 mb-4 md:mb-6">
+<svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</div>
+<h4 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">Knowledge Quiz</h4>
+<p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-6 md:mb-8 max-w-xs">Select a quiz type to test your knowledge.</p>
+<div class="grid grid-cols-1 gap-4 w-full max-w-xs">
+<button onclick="startQuiz('vocab')" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-md flex justify-between items-center group text-sm md:text-base"><span>Vocabulary Quiz</span><span class="group-hover:translate-x-1 transition">→</span></button>
+<button onclick="startQuiz('story')" class="bg-white dark:bg-gray-700 border-2 border-teal-600 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-gray-600 px-6 py-3 rounded-xl font-bold transition shadow-md flex justify-between items-center group text-sm md:text-base"><span>Story Quiz</span><span class="group-hover:translate-x-1 transition">→</span></button>
+</div>
+</div>
+<div id="mcq-active" class="hidden flex flex-col h-full">
+<div class="flex justify-between items-center mb-4 md:mb-6">
+<span class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-wide">Question <span id="q-current">1</span>/10</span>
+<span class="text-xs md:text-sm font-bold text-teal-600 dark:text-teal-400">Score: <span id="q-score">0</span></span>
+</div>
+<div class="mb-4 flex-grow overflow-y-auto">
+<h5 id="q-label" class="text-base md:text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 md:mb-4">Question</h5>
+<div id="q-text-container" class="bg-gray-50 dark:bg-gray-900/50 p-4 md:p-6 rounded-xl border-l-4 border-teal-500 mb-4 md:mb-6">
+<p id="q-text" class="text-lg md:text-xl font-serif text-gray-800 dark:text-gray-100 italic"></p>
+</div>
+<div id="q-options" class="grid grid-cols-1 gap-3"></div>
+<div id="q-explanation" class="hidden mt-4 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-100 text-sm"></div>
+</div>
+<div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between gap-4">
+<button id="quiz-prev-btn" onclick="prevQuestion()" class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition disabled:opacity-30 disabled:hover:bg-transparent text-sm md:text-base">Previous</button>
+<button id="quiz-next-btn" onclick="nextQuestion()" class="flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base">Next</button>
+</div>
+</div>
+<div id="mcq-results" class="hidden flex flex-col items-center justify-center h-full text-center py-10">
+<h4 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">Quiz Complete!</h4>
+<p class="text-gray-600 dark:text-gray-400 mb-6 md:mb-8">Your final score is:</p>
+<div class="text-5xl md:text-6xl font-black text-teal-600 dark:text-teal-400 mb-6 md:mb-8"><span id="final-score">0</span><span class="text-2xl text-gray-400 font-medium">/10</span></div>
+<button onclick="document.getElementById('mcq-results').classList.add('hidden'); document.getElementById('mcq-start').classList.remove('hidden');" class="bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 text-white px-8 py-3 rounded-xl font-bold transition shadow-lg text-sm md:text-base">Choose Another Quiz</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-teal-50 dark:bg-gray-900 text-gray-600 dark:text-gray-500 py-12 md:py-16 border-t border-teal-100 dark:border-gray-800 relative overflow-hidden transition-colors duration-300">
+<div class="container mx-auto px-4 text-center relative z-10">
+<div class="flex items-center justify-center gap-4 mb-6">
+<div class="group relative">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-teal-600 dark:text-teal-500 animate-pulse cursor-pointer hover:text-teal-500 dark:hover:text-teal-400 transition-colors">
+<path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.29-.3.21-.24zm7.53 3.4L18.4 13.5h-1.3l-2 4.97h1.03l.46-1.27h2.82l.47 1.27H20.4zM17 16l.8-2.13.8 2.13h-1.6z" />
+</svg>
+</div>
+<h5 class="text-teal-900 dark:text-white font-bold serif-text text-xl tracking-wide transition-colors duration-300">EnglishMastery</h5>
+<div class="group relative">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-teal-600 dark:text-teal-500 animate-pulse cursor-pointer hover:text-teal-500 dark:hover:text-teal-400 transition-colors">
+<path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.29-.3.21-.24zm7.53 3.4L18.4 13.5h-1.3l-2 4.97h1.03l.46-1.27h2.82l.47 1.27H20.4zM17 16l.8-2.13.8 2.13h-1.6z" />
+</svg>
+</div>
+</div>
+<div class="text-xs md:text-lg text-gray-600 dark:text-gray-500 space-y-2 transition-colors duration-300">
+&lt;Developed By&gt; <strong class="relative inline-block group"><a href="https://www.facebook.com/twshkndy.qlashy" class="text-teal-600 dark:text-teal-500 hover:text-teal-500 dark:hover:text-teal-400 transition-colors duration-300">Osman</a><span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-600 dark:bg-teal-500 transition-all duration-300 group-hover:w-full"></span></strong> &lt;All Copy Rights Reserved @2026&gt;
+</div>
+</div>
+</footer>
+<script>
+document.getElementById("brand-name").onclick=function(){window.scrollTo({top:0,behavior:"smooth"})};const mobileMenuBtn=document.getElementById("mobile-menu-btn"),mobileMenu=document.getElementById("mobile-menu");mobileMenuBtn.addEventListener("click",toggleMobileMenu);function toggleMobileMenu(){mobileMenu.classList.toggle("open")}
+const themeToggleBtn=document.getElementById("theme-toggle"),mobileThemeToggleBtn=document.getElementById("mobile-theme-toggle"),html=document.documentElement;function toggleTheme(){html.classList.toggle("dark");localStorage.theme=html.classList.contains("dark")?"dark":"light"}
+if(localStorage.theme==="dark"||(!("theme" in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches)){html.classList.add("dark")}else{html.classList.remove("dark")}
+themeToggleBtn.addEventListener("click",toggleTheme);mobileThemeToggleBtn.addEventListener("click",toggleTheme);
+const videoId="PDJkSUW_sfk";
+function playEmbeddedVideo(){const e=document.getElementById("video-embed-container"),t=document.getElementById("video-placeholder"),n=document.getElementById("video-controls");t.style.display="none",e.classList.remove("hidden"),n.classList.remove("hidden"),e.innerHTML=`<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`}
+function closeEmbeddedVideo(){const e=document.getElementById("video-embed-container"),t=document.getElementById("video-placeholder"),n=document.getElementById("video-controls");e.innerHTML="",e.classList.add("hidden"),n.classList.add("hidden"),t.style.display="flex"}
+const TTSManager={synth:window.speechSynthesis,utterance:null,isPlaying:!1,isPaused:!1,currentSpanIndex:-1,wordMap:[]};function speakText(e,t){TTSManager.synth.cancel();const n=new SpeechSynthesisUtterance(e);n.lang="en-US",n.rate=1,t&&t.classList.add("speaking"),n.onend=()=>{t&&t.classList.remove("speaking")},TTSManager.synth.speak(n)}
+function toggleChapterAudio(){const e=document.getElementById("chapter-audio-btn"),t=document.getElementById("icon-play"),n=document.getElementById("icon-pause");TTSManager.isPlaying&&!TTSManager.isPaused?(TTSManager.synth.pause(),TTSManager.isPaused=!0,t.classList.remove("hidden"),n.classList.add("hidden"),e.classList.remove("bg-teal-100","dark:bg-teal-900/60")):TTSManager.isPlaying&&TTSManager.isPaused?(TTSManager.synth.resume(),TTSManager.isPaused=!1,t.classList.add("hidden"),n.classList.remove("hidden"),e.classList.add("bg-teal-100","dark:bg-teal-900/60")):(prepareTextAndSpeak(),t.classList.add("hidden"),n.classList.remove("hidden"),e.classList.add("bg-teal-100","dark:bg-teal-900/60"))}
+function prepareTextAndSpeak(){TTSManager.synth.cancel(),TTSManager.wordMap=[],TTSManager.currentSpanIndex=-1,TTSManager.isPlaying=!0,TTSManager.isPaused=!1;const e=document.getElementById("chapter-body").querySelectorAll("p");let t="",n=0;e.forEach(e=>{const o=e.innerText.split(/\s+/);let a="";o.forEach(e=>{if(!e.trim())return;const o=`tts-word-${n}`;a+=`<span id="${o}" class="transition-colors duration-100 rounded px-0.5">${e}</span> `,TTSManager.wordMap.push({start:t.length,id:o}),t+=e+" ",n++}),e.innerHTML=a}),TTSManager.utterance=new SpeechSynthesisUtterance(t),TTSManager.utterance.lang=isTranslated?"ar-SA":"en-US",TTSManager.utterance.rate=1,TTSManager.utterance.onboundary=e=>{"word"===e.name&&(()=>{const t=e.charIndex;let n=null;for(let e=0;e<TTSManager.wordMap.length;e++){if(!(TTSManager.wordMap[e].start<=t))break;n=TTSManager.wordMap[e]}if(n){const e=document.querySelector(".word-highlight");e&&e.classList.remove("word-highlight");const t=document.getElementById(n.id);t&&t.classList.add("word-highlight")}})()},TTSManager.utterance.onend=()=>{resetTTSUI();const e=document.querySelector(".word-highlight");e&&e.classList.remove("word-highlight")},TTSManager.synth.speak(TTSManager.utterance)}
+function resetTTSUI(){TTSManager.isPlaying=!1,TTSManager.isPaused=!1;const e=document.getElementById("icon-play"),t=document.getElementById("icon-pause"),n=document.getElementById("chapter-audio-btn");e&&e.classList.remove("hidden"),t&&t.classList.add("hidden"),n&&n.classList.remove("bg-teal-100","dark:bg-teal-900/60")}
+const chapters=[
+  {
+    title: "Chapter 1: The Arrival and Distraction",
+    titleAr: "الفصل الأول: الوصول والتشتت",
+    body: "<p>On Saturday morning, Ali pushed his empty <strong>trolley</strong> into the <strong>supermarket</strong>. He had written a long <strong>grocery list</strong>, hoping to finish his shopping quickly.</p><p>However, he was immediately distracted by the delicious smell of fresh bread coming from the <strong>bakery</strong> section. It reminded him of his hunger.</p><p>'Maybe I'll just buy everything here,' he laughed to himself, realizing his plan to stick to the list might fail.</p>",
+    bodyAr: "<p>في صباح يوم السبت، دفع علي عربة التسوق (الترولي) الفارغة إلى داخل السوبر ماركت. كان قد كتب قائمة مشتريات (بقالة) طويلة، آملاً في إنهاء تسوقه بسرعة.</p><p>ومع ذلك، تشتت انتباهه على الفور برائحة الخبز اللذيذة المنبعثة من قسم المخبز. ذكرته بجوعه.</p><p>ضحك في نفسه قائلاً: 'ربما سأشتري كل شيء من هنا'، مدركاً أن خطته للالتزام بالقائمة قد تفشل.</p>"
+  },
+  {
+    title: "Chapter 2: Fresh Produce and Dairy",
+    titleAr: "الفصل الثاني: المنتجات الطازجة والألبان",
+    body: "<p>He moved to the <strong>fresh produce</strong> section and picked up bananas, tomatoes, and some <strong>organic</strong> apples. He wanted to ensure he had healthy food for the week.</p><p>In the <strong>dairy products</strong> aisle, he found himself arguing with another <strong>customer</strong> about the last bottle of <strong>imported</strong> milk on the shelf.</p><p>'Don't worry,' said James, the <strong>cashier</strong> who was stocking shelves nearby, 'We still have plenty of it in <strong>stock</strong> in the back.'</p>",
+    bodyAr: "<p>انتقل إلى قسم المنتجات الطازجة والتقط الموز، والطماطم، وبعض التفاح العضوي. أراد التأكد من حصوله على طعام صحي للأسبوع.</p><p>في ممر منتجات الألبان، وجد نفسه يتجادل مع زبون آخر حول آخر زجاجة حليب مستورد على الرف.</p><p>قال جيمس، الكاشير الذي كان يرتب الأرفف قريباً: 'لا تقلق، لا يزال لدينا الكثير منه في المخزون في الخلف.'</p>"
+  },
+  {
+    title: "Chapter 3: The Frozen Section",
+    titleAr: "الفصل الثالث: القسم المجمد",
+    body: "<p>Ali hurried to the <strong>frozen food</strong> section to find something quick for dinner. He grabbed a pizza that had a bright <strong>discount</strong> sticker on it.</p><p>But when he checked the <strong>expiry date</strong>, he realized it was tomorrow. That meant he had to eat it very soon.</p><p>'That's fast food in a different way,' he joked, placing the pizza in his cart anyway.</p>",
+    bodyAr: "<p>أسرع علي إلى قسم الأطعمة المجمدة ليجد شيئاً سريعاً للعشاء. التقط بيتزا كان عليها ملصق خصم لامع.</p><p>ولكن عندما فحص تاريخ انتهاء الصلاحية، أدرك أنه غداً. هذا يعني أنه كان عليه تناولها قريباً جداً.</p><p>قال مازحاً: 'هذا طعام سريع بطريقة مختلفة'، واضعاً البيتزا في عربته على أي حال.</p>"
+  },
+  {
+    title: "Chapter 4: Canned Food and Checkout",
+    titleAr: "الفصل الرابع: الأطعمة المعلبة والدفع",
+    body: "<p>At the shelves, he saw <strong>canned food</strong> all neatly arranged with shiny <strong>price tags</strong> and <strong>barcodes</strong> facing outward. He chose his favorite <strong>brand</strong> of beans.</p><p>When he reached the <strong>checkout</strong>, the <strong>queue</strong> was very long. He didn't want to wait that long.</p><p>Luckily, Ali sneaked into the <strong>express lane</strong> because he had a small <strong>basket</strong> relative to the others.</p>",
+    bodyAr: "<p>عند الأرفف، رأى الأطعمة المعلبة مرتبة بعناية وعليها بطاقات الأسعار والباركود اللامعة متجهة للخارج. اختار علامته التجارية المفضلة من الفاصوليا.</p><p>عندما وصل إلى مكان الدفع، كان الطابور طويلاً جداً. لم يرد الانتظار كل هذا الوقت.</p><p>لحسن الحظ، تسلل علي إلى الممر السريع لأنه كان يحمل سلة صغيرة مقارنة بالآخرين.</p>"
+  },
+  {
+    title: "Chapter 5: The Payment and The Mistake",
+    titleAr: "الفصل الخامس: الدفع والخطأ",
+    body: "<p>James scanned his items quickly. Ali refused a <strong>plastic bag</strong> and showed off his new <strong>reusable bag</strong>, proud of being eco-friendly.</p><p>When he paid, he swiped his <strong>loyalty card</strong> proudly and got a long <strong>receipt</strong>. Ali left smiling, sure he found the best <strong>bargain</strong> of the week.</p><p>But when he opened the bag outside to check his items, he realized the irony: he forgot the bread again!</p>",
+    bodyAr: "<p>قام جيمس بمسح أغراضه بسرعة. رفض علي الكيس البلاستيكي وتفاخر بحقيبته الجديدة القابلة لإعادة الاستخدام، فخوراً بكونه صديقاً للبيئة.</p><p>عندما دفع، مرر بطاقة الولاء بفخر وحصل على إيصال طويل. غادر علي مبتسماً، متأكداً من أنه وجد أفضل صفقة في الأسبوع.</p><p>ولكن عندما فتح الحقيبة في الخارج ليفحص أغراضه، أدرك المفارقة: لقد نسي الخبز مرة أخرى!</p>"
+  }
+];
+
+const vocabList = [
+  // SHOP & ITEMS (15)
+  { word: "Supermarket", def: "A large self-service shop selling foods.", cat: "Shop", ar: "سوبر ماركت" },
+  { word: "Aisle", def: "A passage between shelves of goods.", cat: "Shop", ar: "ممر" },
+  { word: "Shelf", def: "Surface to display goods.", cat: "Shop", ar: "رف" },
+  { word: "Trolley", def: "Wheeled cart for shopping.", cat: "Shop", ar: "عربة تسوق" },
+  { word: "Cart", def: "Another term for trolley (US).", cat: "Shop", ar: "عربة" },
+  { word: "Basket", def: "Container used to carry things.", cat: "Shop", ar: "سلة" },
+  { word: "Grocery list", def: "Items written down to buy.", cat: "Shop", ar: "قائمة مشتريات" },
+  { word: "Express lane", def: "Fast checkout for few items.", cat: "Shop", ar: "ممر سريع" },
+  { word: "Stock", def: "Goods available in the store.", cat: "Shop", ar: "مخزون" },
+  { word: "Brand", def: "Product manufactured by a specific company.", cat: "Shop", ar: "علامة تجارية" },
+  { word: "Customer", def: "Person buying goods.", cat: "Shop", ar: "زبون" },
+  { word: "Packaging", def: "Material used to wrap goods.", cat: "Shop", ar: "تغليف" },
+  { word: "Plastic bag", def: "Carrier made of plastic.", cat: "Shop", ar: "كيس بلاستيك" },
+  { word: "Reusable bag", def: "Eco-friendly bag used many times.", cat: "Shop", ar: "كيس قابل لإعادة الاستخدام" },
+  { word: "Entrance", def: "Way into the store.", cat: "Shop", ar: "مدخل" },
+
+  // FOOD (9)
+  { word: "Bakery", def: "Place where bread is made.", cat: "Food", ar: "مخبز" },
+  { word: "Dairy products", def: "Milk-based foods like cheese.", cat: "Food", ar: "منتجات الألبان" },
+  { word: "Fresh produce", def: "Fresh fruits and vegetables.", cat: "Food", ar: "منتجات طازجة" },
+  { word: "Organic", def: "Natural, grown without chemicals.", cat: "Food", ar: "عضوي" },
+  { word: "Frozen food", def: "Food stored at very low temp.", cat: "Food", ar: "طعام مجمد" },
+  { word: "Canned food", def: "Food preserved in metal tins.", cat: "Food", ar: "طعام معلب" },
+  { word: "Imported goods", def: "Products from other countries.", cat: "Food", ar: "بضائع مستوردة" },
+  { word: "Expiry date", def: "Date when food goes bad.", cat: "Food", ar: "تاريخ الصلاحية" },
+  { word: "Ingredient", def: "Part of a food mixture.", cat: "Food", ar: "مكونات" },
+
+  // PAYMENT (9)
+  { word: "Cashier", def: "Person handling payments.", cat: "Payment", ar: "كاشير" },
+  { word: "Checkout", def: "Place to pay for goods.", cat: "Payment", ar: "نقطة الدفع" },
+  { word: "Receipt", def: "Printed proof of purchase.", cat: "Payment", ar: "إيصال" },
+  { word: "Price tag", def: "Label showing the cost.", cat: "Payment", ar: "بطاقة السعر" },
+  { word: "Barcode", def: "Scannable lines on a product.", cat: "Payment", ar: "باركود" },
+  { word: "Discount", def: "Lower price than usual.", cat: "Payment", ar: "خصم" },
+  { word: "Bargain", def: "Good deal for the price.", cat: "Payment", ar: "لقطة / صفقة" },
+  { word: "Loyalty card", def: "Card for collecting points.", cat: "Payment", ar: "بطاقة ولاء" },
+  { word: "Wallet", def: "Holder for money/cards.", cat: "Payment", ar: "محفظة" },
+
+  // ACTION (7)
+  { word: "Queue", def: "Line of people waiting.", cat: "Action", ar: "طابور" },
+  { word: "Scan", def: "Read barcode with a machine.", cat: "Action", ar: "يمسح" },
+  { word: "Buy", def: "Obtain in exchange for money.", cat: "Action", ar: "يشتري" },
+  { word: "Pay", def: "Give money for goods.", cat: "Action", ar: "يدفع" },
+  { word: "Push", def: "Move trolley forward.", cat: "Action", ar: "يدفع (عربة)" },
+  { word: "Weigh", def: "Measure how heavy it is.", cat: "Action", ar: "يزن" },
+  { word: "Compare", def: "Check differences between items.", cat: "Action", ar: "يقارن" }
+];
+
+const storyQuestions = [
+  {
+    question: "What distracted Ali when he first entered the supermarket?",
+    options: ["The bright lights", "The smell of bread", "A loud customer", "The colorful fruits"],
+    answer: "The smell of bread",
+    explanation: "Correct! The smell of bread from the bakery distracted him from his list."
+  },
+  {
+    question: "Why did Ali argue with another customer?",
+    options: ["Over a parking spot", "About the price of apples", "Over the last bottle of imported milk", "Because the queue was too long"],
+    answer: "Over the last bottle of imported milk",
+    explanation: "Correct! He argued with a customer about the last bottle of imported milk in the dairy aisle."
+  },
+  {
+    question: "What items did Ali pick up in the fresh produce section?",
+    options: ["Potatoes and onions", "Bananas, tomatoes, and organic apples", "Strawberries and grapes", "Carrots and lettuce"],
+    answer: "Bananas, tomatoes, and organic apples",
+    explanation: "Correct! The story mentions he picked up bananas, tomatoes, and organic apples."
+  },
+  {
+    question: "Why did Ali joke about the pizza being 'fast food'?",
+    options: ["It was already cooked", "It was very cheap", "The expiry date was tomorrow", "He was going to eat it in the car"],
+    answer: "The expiry date was tomorrow",
+    explanation: "Correct! He joked because the expiry date was tomorrow, so he had to eat it fast."
+  },
+  {
+    question: "What lane did Ali use to checkout?",
+    options: ["The regular lane", "The express lane", "The self-checkout", "The closed lane"],
+    answer: "The express lane",
+    explanation: "Correct! Ali sneaked into the express lane."
+  },
+  {
+    question: "Why was Ali allowed to use the express lane?",
+    options: ["He was a VIP", "He knew the cashier", "He had a small basket", "The store was empty"],
+    answer: "He had a small basket",
+    explanation: "Correct! He used the express lane because he had a small basket relative to others."
+  },
+  {
+    question: "What type of bag did Ali use?",
+    options: ["A plastic bag", "A paper bag", "A reusable bag", "No bag"],
+    answer: "A reusable bag",
+    explanation: "Correct! Ali refused the plastic bag and showed off his new reusable bag."
+  },
+  {
+    question: "What card did Ali swipe at the payment terminal?",
+    options: ["Credit card", "Debit card", "Loyalty card", "ID card"],
+    answer: "Loyalty card",
+    explanation: "Correct! He swiped his loyalty card proudly."
+  },
+  {
+    question: "How did Ali feel when he left the supermarket?",
+    options: ["Angry about the argument", "Happy he found a bargain", "Tired from walking", "Confused about the receipt"],
+    answer: "Happy he found a bargain",
+    explanation: "Correct! He left smiling, sure he found the best bargain of the week."
+  },
+  {
+    question: "What did Ali realize he forgot at the very end?",
+    options: ["The milk", "The pizza", "The bread", "His wallet"],
+    answer: "The bread",
+    explanation: "Correct! Ironically, the smell of bread distracted him, but he forgot to buy the bread."
+  }
+];
+
+let currentChapter=0,isTranslated=!1,currentFilter="all",searchQuery="",currentQuizQuestions=[],mcqIndex=0,mcqScore=0,quizAnswers=[],currentReviewWord=null;window.onload=()=>{renderChapter(),renderVocab(),loadReviewWord()};
+function renderChapter(){const e=document.getElementById("chapter-container"),t=document.getElementById("chapter-title"),n=document.getElementById("chapter-body"),o=document.getElementById("chapter-counter"),a=document.getElementById("story-progress");TTSManager.synth.cancel(),resetTTSUI(),e.style.opacity=0,setTimeout(()=>{const s=void 0!==chapters&&chapters.length>0?chapters:[{title:"Error",body:"<p>Chapters data missing.</p>"}],r=s[currentChapter]||s[0];isTranslated?(t.textContent=r.titleAr,n.innerHTML=r.bodyAr,n.className="arabic-text text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 md:space-y-6",t.className="text-xl md:text-2xl font-bold text-teal-800 dark:text-teal-300 arabic-text"):(t.textContent=r.title,n.innerHTML=r.body,n.className="serif-text text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 md:space-y-6",t.className="text-xl md:text-2xl font-bold text-teal-800 dark:text-teal-300 serif-text"),o.textContent=`${currentChapter+1} / ${s.length}`,a.style.width=`${(currentChapter+1)/s.length*100}%`,document.getElementById("prev-btn").disabled=0===currentChapter,e.style.opacity=1},200)}
+function toggleChapterTranslation(){isTranslated=!isTranslated,renderChapter()}
+function nextChapter(){const e=void 0!==chapters?chapters.length:5;currentChapter<e-1?currentChapter++:currentChapter=0,isTranslated=!1,renderChapter()}
+function prevChapter(){currentChapter>0&&(currentChapter--,isTranslated=!1,renderChapter())}
+function handleSearch(e){searchQuery=e.toLowerCase(),renderVocab()}
+function filterVocab(e){document.querySelectorAll(".category-pill").forEach(e=>e.classList.remove("active")),event.target.classList.add("active"),currentFilter=e,renderVocab()}
+function renderVocab(){const e=void 0!==vocabList?vocabList:[],t=document.getElementById("vocab-grid");t.innerHTML="";const n=e.filter(e=>{const t="all"===currentFilter||e.cat===currentFilter||"all"===e.cat,n=e.word.toLowerCase().includes(searchQuery)||e.def.toLowerCase().includes(searchQuery);return t&&n});if(0===n.length)return void(t.innerHTML=`<div class="col-span-full text-center py-10 text-gray-400">No words found matching "${searchQuery}".</div>`);n.forEach((e,n)=>{const o=document.createElement("div");o.className="vocab-card bg-[#F9FAFB] dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 flex flex-col justify-between shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-lg transition-all relative";const a=`word-${n}`,s=`audio-${n}`;o.innerHTML=`<div><div class="flex justify-between items-start mb-2"><h5 id="${a}" class="font-bold text-gray-800 dark:text-gray-100 text-lg md:text-xl transition-all">${e.word}</h5><div class="flex gap-1"><button id="${s}" onclick="speakText('${e.word}', this)" class="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition" title="Pronounce"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></button><button onclick="toggleTranslation('${a}', '${e.word}', '${e.ar}')" class="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition" title="Translate"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg></button></div></div><span class="text-[10px] uppercase font-bold text-teal-600 dark:text-teal-300 bg-teal-50 dark:bg-teal-900/40 px-2 py-1 rounded inline-block mb-3">${e.cat}</span><p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">${e.def}</p></div>`,t.appendChild(o)})}
+function toggleTranslation(e,t,n){const o=document.getElementById(e);o.textContent===t?(o.textContent=n,o.classList.add("text-teal-700","dark:text-teal-300","arabic-text")):(o.textContent=t,o.classList.remove("text-teal-700","dark:text-teal-300","arabic-text"))}
+function startQuiz(e){const t=void 0!==vocabList?vocabList:[],n=void 0!==typeof storyQuestions?storyQuestions:[];if("vocab"===e&&t.length>0){const e=[...t].sort(()=>.5-Math.random()).slice(0,10);currentQuizQuestions=e.map(e=>{const n=t.filter(t=>t.word!==e.word).sort(()=>.5-Math.random()).slice(0,3),o=[e.word,...n.map(e=>e.word)].sort(()=>.5-Math.random());return{question:"Which word matches this definition?",text:e.def,options:o,answer:e.word,explanation:`Correct! "${e.word}" means: ${e.def}`}})}else{if(!(n.length>0))return void alert("Quiz data not loaded properly.");currentQuizQuestions=[...n].sort(()=>.5-Math.random())}mcqIndex=0,mcqScore=0,quizAnswers=new Array(currentQuizQuestions.length).fill(null),document.getElementById("mcq-start").classList.add("hidden"),document.getElementById("mcq-results").classList.add("hidden"),document.getElementById("mcq-active").classList.remove("hidden"),renderQuestion()}
+function renderQuestion(){const e=currentQuizQuestions[mcqIndex],t=quizAnswers[mcqIndex];document.getElementById("q-current").textContent=mcqIndex+1,document.getElementById("q-score").textContent=mcqScore,document.getElementById("q-label").textContent=e.question,document.getElementById("q-text").textContent=e.text?`"${e.text}"`:"";const n=document.getElementById("q-text").parentElement;e.text?n.classList.remove("hidden"):n.classList.add("hidden");const o=document.getElementById("q-explanation");o.classList.add("hidden"),o.innerHTML="";const a=document.getElementById("quiz-next-btn");a.textContent=mcqIndex===currentQuizQuestions.length-1?"End Quiz":"Next",a.onclick=mcqIndex===currentQuizQuestions.length-1?showResults:nextQuestion,a.disabled=!t,document.getElementById("quiz-prev-btn").disabled=0===mcqIndex;const s=document.getElementById("q-options");s.innerHTML="",e.options.forEach(n=>{const o=document.createElement("button");o.className="quiz-option w-full text-left p-4 rounded-xl border border-gray-200 dark:border-gray-700 transition font-medium text-gray-700 dark:text-gray-200 text-sm md:text-base select-text",t?(o.onclick=null,o.classList.add("allow-select"),n===e.answer?o.classList.add("bg-green-100","dark:bg-green-900","border-green-500","dark:border-green-500","text-green-800","dark:text-green-100"):n===t.selected?o.classList.add("bg-red-100","dark:bg-red-900","border-red-500","dark:border-red-500","text-red-800","dark:text-red-100"):o.classList.add("opacity-50")):(o.classList.add("hover:bg-teal-50","dark:hover:bg-teal-900/30","hover:border-teal-200","dark:hover:border-teal-800","cursor-pointer"),o.onclick=()=>handleAnswer(n)),o.textContent=n,s.appendChild(o)}),t&&(o.innerHTML=`<strong>${t.isCorrect?"Correct!":"Incorrect."}</strong> ${e.explanation||""}`,o.className=`mt-4 p-4 rounded-xl text-sm border select-text ${t.isCorrect?"bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-100":"bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-100"}`,o.classList.remove("hidden"))}
+function handleAnswer(e){if(quizAnswers[mcqIndex])return;const t=currentQuizQuestions[mcqIndex],n=e===t.answer;n&&mcqScore++,quizAnswers[mcqIndex]={selected:e,isCorrect:n},renderQuestion()}
+function nextQuestion(){mcqIndex<currentQuizQuestions.length-1&&(mcqIndex++,renderQuestion())}
+function prevQuestion(){mcqIndex>0&&(mcqIndex--,renderQuestion())}
+function showResults(){document.getElementById("mcq-active").classList.add("hidden"),document.getElementById("mcq-results").classList.remove("hidden"),document.getElementById("final-score").textContent=mcqScore}
+function loadReviewWord(){const e=void 0!==vocabList?vocabList:[];if(0===e.length)return;currentReviewWord=e[Math.floor(Math.random()*e.length)],document.getElementById("review-definition").textContent=`"${currentReviewWord.def}"`,document.getElementById("review-input").value="",document.getElementById("review-feedback").textContent=""}
+function checkReviewWord(){if(!currentReviewWord)return;const e=document.getElementById("review-input").value.trim().toLowerCase(),t=currentReviewWord.word.toLowerCase(),n=document.getElementById("review-feedback");e===t?(n.textContent="Correct! Great job.",n.classList.add("text-green-600","dark:text-green-400"),n.classList.remove("text-red-600","dark:text-red-400"),setTimeout(loadReviewWord,1500)):(n.textContent=`Incorrect. The word was "${currentReviewWord.word}".`,n.classList.add("text-red-600","dark:text-red-400"),n.classList.remove("text-green-600","dark:text-green-400"))}
+function scrollToSection(e){document.getElementById(e).scrollIntoView({behavior:"smooth"})}
+</script>
+</body>
+</html>
