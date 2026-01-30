@@ -37,8 +37,9 @@ html.dark .category-pill.active { background-color: #14b8a6; color: black; borde
 .allow-select { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
 .speaking { color: #0d9488 !important; animation: pulse 1s infinite; }
 .dark .speaking { color: #14b8a6 !important; }
-.word-highlight { background-color: #fef08a; color: #000; border-radius: 4px; padding: 0 2px; transition: background-color 0.1s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-.dark .word-highlight { background-color: #ca8a04; color: #fff; }
+/* Improved Highlighter Visibility */
+.word-highlight { background-color: #fef08a !important; color: #000 !important; border-radius: 4px; padding: 0 2px; transition: background-color 0.1s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.2); border-bottom: 2px solid #eab308; }
+.dark .word-highlight { background-color: #ca8a04 !important; color: #fff !important; border-bottom: 2px solid #facc15; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#FDFCF0] text-gray-800 dark:bg-gray-900 dark:text-gray-100">
@@ -88,7 +89,8 @@ html.dark .category-pill.active { background-color: #14b8a6; color: black; borde
     Lesson 1: Learn shopping vocabulary, understand the "In-Depth" grammar rules, and master the "Differences" between confusing words.
 </p>
 <div class="w-full max-w-3xl mx-auto">
-<div class="rounded-2xl overflow-hidden shadow-lg border border-teal-100 dark:border-teal-800 bg-black aspect-video relative group">
+<!-- Removed border classes here as requested -->
+<div class="rounded-2xl overflow-hidden shadow-lg bg-black aspect-video relative group">
 <div id="video-placeholder" class="absolute inset-0 bg-teal-50 dark:bg-teal-900/30 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition hover:bg-teal-100 dark:hover:bg-teal-900/50" onclick="playEmbeddedVideo()">
 <button class="text-white bg-teal-600 hover:bg-teal-700 font-bold text-lg flex items-center gap-3 px-8 py-4 rounded-full shadow-lg transition transform group-hover:scale-105">
 <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>Start Lesson
@@ -375,7 +377,8 @@ html.dark .category-pill.active { background-color: #14b8a6; color: black; borde
 <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.29-.3.21-.24zm7.53 3.4L18.4 13.5h-1.3l-2 4.97h1.03l.46-1.27h2.82l.47 1.27H20.4zM17 16l.8-2.13.8 2.13h-1.6z" />
 </svg>
 </div>
-<h5 class="text-teal-900 dark:text-white font-bold serif-text text-xl tracking-wide transition-colors duration-300">EnglishMastery</h5>
+<!-- Colored brand in footer as requested -->
+<h5 class="text-teal-900 dark:text-white font-bold serif-text text-xl tracking-wide transition-colors duration-300">English<span class="text-teal-600 dark:text-teal-500">Mastery</span></h5>
 <div class="group relative">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-teal-600 dark:text-teal-500 animate-pulse cursor-pointer hover:text-teal-500 dark:hover:text-teal-400 transition-colors">
 <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.29-.3.21-.24zm7.53 3.4L18.4 13.5h-1.3l-2 4.97h1.03l.46-1.27h2.82l.47 1.27H20.4zM17 16l.8-2.13.8 2.13h-1.6z" />
@@ -393,7 +396,8 @@ const themeToggleBtn=document.getElementById("theme-toggle"),mobileThemeToggleBt
 if(localStorage.theme==="dark"||(!("theme" in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches)){html.classList.add("dark")}else{html.classList.remove("dark")}
 themeToggleBtn.addEventListener("click",toggleTheme);mobileThemeToggleBtn.addEventListener("click",toggleTheme);
 const videoId="PDJkSUW_sfk";
-function playEmbeddedVideo(){const e=document.getElementById("video-embed-container"),t=document.getElementById("video-placeholder"),n=document.getElementById("video-controls");t.style.display="none",e.classList.remove("hidden"),n.classList.remove("hidden"),e.innerHTML=`<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`}
+// Updated JS for video embedding: Added loop=1 and playlist to hide suggestions, and modestbranding
+function playEmbeddedVideo(){const e=document.getElementById("video-embed-container"),t=document.getElementById("video-placeholder"),n=document.getElementById("video-controls");t.style.display="none",e.classList.remove("hidden"),n.classList.remove("hidden"),e.innerHTML=`<iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&modestbranding=1&loop=1&playlist=${videoId}&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`}
 function closeEmbeddedVideo(){const e=document.getElementById("video-embed-container"),t=document.getElementById("video-placeholder"),n=document.getElementById("video-controls");e.innerHTML="",e.classList.add("hidden"),n.classList.add("hidden"),t.style.display="flex"}
 const TTSManager={synth:window.speechSynthesis,utterance:null,isPlaying:!1,isPaused:!1,currentSpanIndex:-1,wordMap:[]};function speakText(e,t){TTSManager.synth.cancel();const n=new SpeechSynthesisUtterance(e);n.lang="en-US",n.rate=1,t&&t.classList.add("speaking"),n.onend=()=>{t&&t.classList.remove("speaking")},TTSManager.synth.speak(n)}
 function toggleChapterAudio(){const e=document.getElementById("chapter-audio-btn"),t=document.getElementById("icon-play"),n=document.getElementById("icon-pause");TTSManager.isPlaying&&!TTSManager.isPaused?(TTSManager.synth.pause(),TTSManager.isPaused=!0,t.classList.remove("hidden"),n.classList.add("hidden"),e.classList.remove("bg-teal-100","dark:bg-teal-900/60")):TTSManager.isPlaying&&TTSManager.isPaused?(TTSManager.synth.resume(),TTSManager.isPaused=!1,t.classList.add("hidden"),n.classList.remove("hidden"),e.classList.add("bg-teal-100","dark:bg-teal-900/60")):(prepareTextAndSpeak(),t.classList.add("hidden"),n.classList.remove("hidden"),e.classList.add("bg-teal-100","dark:bg-teal-900/60"))}
